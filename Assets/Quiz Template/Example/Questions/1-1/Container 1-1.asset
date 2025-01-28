@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Container 1-1
   m_EditorClassIdentifier: 
   shouldCutCardPool: 0
-  numberOfQuestions: 2
+  numberOfQuestions: 0
   questionCards:
   - {fileID: 11400000, guid: 55bf51faa376f5c4aac02132696c45be, type: 2}
   - {fileID: 11400000, guid: 716170c17bcbda14d91ade1bb78979d8, type: 2}

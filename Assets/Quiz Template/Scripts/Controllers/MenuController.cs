@@ -18,7 +18,7 @@ public class MenuController : MonoBehaviour
     public TextMeshProUGUI buyError, starCounter;
     public Transform buttonContainer;
 
-    public void Init(int quizIndex)
+    public void Init()
     {
         if (config == null)
         {
@@ -33,13 +33,13 @@ public class MenuController : MonoBehaviour
             buttonContainer.GetChild(0).GetComponentInChildren<TextMeshProUGUI>().color = config.easyTextColor;
         }
 
-        bool isOpen = gameManager.IsLevelWasOpened(quizIndex, 1);
+        bool isOpen = gameManager.IsLevelWasOpened(gameManager.chosenQuizIndex, 1);
         Sprite sprite = isOpen ? config.mediumButtonImage : config.lockImage;
         Color color = isOpen ? config.mediumTextColor : config.lockColor;
         buttonContainer.GetChild(1).GetComponent<Image>().sprite = sprite;
         buttonContainer.GetChild(1).GetComponentInChildren<TextMeshProUGUI>().color = color;
 
-        isOpen = gameManager.IsLevelWasOpened(quizIndex, 2);
+        isOpen = gameManager.IsLevelWasOpened(gameManager.chosenQuizIndex, 2);
         sprite = isOpen ? config.hardButtonImage : config.lockImage;
         color = isOpen ? config.hardTextColor : config.lockColor;
         buttonContainer.GetChild(2).GetComponent<Image>().sprite = sprite;
@@ -87,7 +87,7 @@ public class MenuController : MonoBehaviour
         }
 
         buyWindow.SetActive(false);
-        Init(gameManager.chosenQuizIndex);
+        Init();
     }
 
     private void DoBuyError(string text)

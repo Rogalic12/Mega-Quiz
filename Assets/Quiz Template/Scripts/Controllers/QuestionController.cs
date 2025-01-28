@@ -18,14 +18,14 @@ public class QuestionController : MonoBehaviour
     public GameObject inMenuWindow;
     public TextMeshProUGUI questionText, counterText;
     public Image image;
-    public GameObject answers;
+    public GameObject answers, answerButtonPrefab;
 
     // Инициализация контроллера. Обязательно вызвать ПЕРЕД началом каждого ответа на вопросы
     // Принимает на вход контейнер с вопросами, на которые потребуется отвечать пользователю и переменную, следует ли рандомизировать порядок вопросов 
-    public void Init(CardsContainer container, bool isShuffle)
+    public void Init(CardsContainer container)
     {
         List<QuestionCard> allPool = new List<QuestionCard>(container.questionCards);
-        if (isShuffle)
+        if (gameManager.shouldShuffle)
         {
             int n = allPool.Count;
             for (int i = n - 1; i > 0; i--)
@@ -46,27 +46,28 @@ public class QuestionController : MonoBehaviour
     // Функция используется для занесения данных из входной переменной card в интерфейс
     public void NextQuestion(QuestionCard card)
     {
+        for (int i = 0; i < answers.transform.childCount; i++)
+        {
+            Destroy(answers.transform.GetChild(i).gameObject);
+        }
+
         questionText.text = card.question;
         image.sprite = card.image;
         counterText.text = $"{currentQuestion}/{cards.Count}";
 
-        if (card.wrongAnswers.Length == 3)
+        List<string> wrongs = new(card.wrongAnswers.OrderBy(_ => Random.value).Take(gameManager.chosenLevelIndex + 1)); // Рандомные неправильные ответы, отрезанные по сложности уровня
+        List<string> allAnswers = new(wrongs.Append(card.rightAnswer).OrderBy(_ => Random.value)); // Рандомные варианты ответов
+        for (int i = 0; i < allAnswers.Count; i++)
         {
-            List<TextMeshProUGUI> textContainers = new List<TextMeshProUGUI>(answers.GetComponentsInChildren<TextMeshProUGUI>());
-            List<string> allAnswers = new List<string>(card.wrongAnswers) { card.rightAnswer };
-            List<string> editableAnswers = new List<string>(allAnswers);
-            for (int i = 0; i < allAnswers.Count; i++)
-            {
-                TextMeshProUGUI answer = textContainers[i];
-                int rand = Random.Range(0, editableAnswers.Count);
-                answer.text = editableAnswers[rand];
-                if (editableAnswers[rand].Equals(allAnswers[allAnswers.Count - 1]))
-                {
-                    rightIndex = i;
-                    print("Right index was set");
-                }
+            GameObject button = Instantiate(answerButtonPrefab, answers.transform);
+            int index = i;
+            button.GetComponent<Button>().onClick.AddListener(() => AnswerButtonPressed(index));
+            button.GetComponentInChildren<TextMeshProUGUI>().text = allAnswers[i];
 
-                editableAnswers.Remove(editableAnswers[rand]);
+            if (allAnswers[i] == card.rightAnswer)
+            {
+                rightIndex = i;
+                print("Right index was set: " + i);
             }
         }
     }

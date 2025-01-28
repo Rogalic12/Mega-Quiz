@@ -40,11 +40,9 @@ public class GameManager : MonoBehaviour
     // Bootstrap для всей игры. На старте запускает инициализацию меню 
     public void Awake()
     {
-        openedLevels.Clear();
+        openedLevels.Clear(); // Убрать
         YandexGame.savesData.passedLevels = 0; // ! УБРАТЬ ПЕРЕД РЕЛИЗОМ ТРИ СТРОКИ
         YandexGame.SaveProgress(); // ! СТРОКИ ДЛЯ ДЕБАГА
-
-        DontDestroyOnLoad(gameObject);
 
         ChooseController.gameManager = this;
         MenuController.gameManager = this;
@@ -87,14 +85,14 @@ public class GameManager : MonoBehaviour
             chosenQuizIndex = requiredInt;
             state = GameState.InLevelMenu;
             LoadNewWindow(currentWindow, menuController.transform);
-            menuController.Init(requiredInt);
+            menuController.Init();
         }
         else if (currentWindow.TryGetComponent(out MenuController _))
         {
             chosenLevelIndex = requiredInt;
             state = GameState.SolvingQuestions;
             LoadNewWindow(currentWindow, questionController.transform);
-            questionController.Init(quizzes[chosenQuizIndex].testsContainers[requiredInt], shouldShuffle);
+            questionController.Init(quizzes[chosenQuizIndex].testContainer);
         }
         else if (currentWindow.TryGetComponent(out QuestionController _))
         {
@@ -109,7 +107,7 @@ public class GameManager : MonoBehaviour
         {
             state = GameState.SolvingQuestions;
             LoadNewWindow(currentWindow, questionController.transform);
-            questionController.Init(quizzes[chosenQuizIndex].testsContainers[requiredInt], shouldShuffle);
+            questionController.Init(quizzes[chosenQuizIndex].testContainer);
         }
     }
 
