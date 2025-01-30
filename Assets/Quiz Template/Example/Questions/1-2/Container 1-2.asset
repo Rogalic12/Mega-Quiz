@@ -12,16 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a62cfd1312c517d4f8cb4b7dd80671d1, type: 3}
   m_Name: Container 1-2
   m_EditorClassIdentifier: 
-  shouldCutCardPool: 1
+  shouldCutCardPool: 0
   numberOfQuestions: 5
-  questionCards:
-  - {fileID: 11400000, guid: 195119cd14fab7746aaa7c190a90b4e0, type: 2}
-  - {fileID: 11400000, guid: 4d94452549f43cc40ad8f7f8d192554b, type: 2}
-  - {fileID: 11400000, guid: 71cbb952180f72448b63c4247ccdd955, type: 2}
-  - {fileID: 11400000, guid: 8c52167d5b30aa349b3b6f364bf46d32, type: 2}
-  - {fileID: 11400000, guid: 1c96bb4d0368097499e00c51521f610c, type: 2}
-  - {fileID: 11400000, guid: 70f4fb8f6f1aa7f4eb48dfc004459769, type: 2}
-  - {fileID: 11400000, guid: 97628d34f57f121449cced098972e182, type: 2}
-  - {fileID: 11400000, guid: 03d0b36d201b30749bff57097c048f91, type: 2}
-  - {fileID: 11400000, guid: c0b79185e3eac4843bb0634e9d54636f, type: 2}
-  - {fileID: 11400000, guid: 29777dadd9dd4e842b6ee2e1e24febd8, type: 2}
+  sheetName: "\u041B\u0438\u0441\u04421"

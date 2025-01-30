@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -7,8 +8,11 @@ using YG;
 // TODO: Метод нажатия на кнопки тестов, запуск меню сложности, запоминание всех выборов
 public class GameManager : MonoBehaviour
 {
-    public string language => YandexGame.lang;
-    public HashSet<DoubleInt> openedLevels => YandexGame.savesData.openedLevels;
+    public Material[] mats;
+
+
+    public string Language => YandexGame.lang;
+    public HashSet<DoubleInt> OpenedLevels => YandexGame.savesData.openedLevels;
 
     public enum GameState
     {
@@ -40,7 +44,7 @@ public class GameManager : MonoBehaviour
     // Bootstrap для всей игры. На старте запускает инициализацию меню 
     public void Awake()
     {
-        openedLevels.Clear(); // Убрать
+        OpenedLevels.Clear(); // Убрать
         YandexGame.savesData.passedLevels = 0; // ! УБРАТЬ ПЕРЕД РЕЛИЗОМ ТРИ СТРОКИ
         YandexGame.SaveProgress(); // ! СТРОКИ ДЛЯ ДЕБАГА
 
@@ -61,6 +65,19 @@ public class GameManager : MonoBehaviour
             musicButton.GetComponent<Image>().sprite = musicSprites[1];
             musicButton.transform.localScale = Vector3.one;
         }
+
+
+
+
+        ExcelReader reader = new("Assets/Quiz Template/Example/Sheets/MegaQuiz.xlsx");
+        List<Dictionary<string, string>> data = reader.ReadSheet("рогалики");
+        for (int i = 0; i < data.Count; i++)
+        {
+            Texture2D texture = new Texture2D(2, 2);
+            texture.filterMode = FilterMode.Point;
+            texture.LoadImage(Convert.FromBase64String(data[i]["Изображение"]));
+            mats[i].mainTexture = texture;
+        }
     }
 
     public GameState GetGameState() { return state; }
@@ -73,7 +90,7 @@ public class GameManager : MonoBehaviour
 
     public bool IsLevelWasOpened(int quizIndex, int levelIndex)
     {
-        return openedLevels.Any(obj => obj.quiz == quizIndex && obj.difficult == levelIndex);
+        return OpenedLevels.Any(obj => obj.quiz == quizIndex && obj.difficult == levelIndex);
     }
 
     // Общая функция для основного потока переключения окон

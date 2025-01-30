@@ -14,7 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   image: {fileID: 1024090739, guid: d63af375d8350db4b92fc969a4b4792e, type: 3}
   quizName: Quiz 1
-  testsContainers:
-  - {fileID: 11400000, guid: ab0a1c6a5e1c1fc4fbd60d7bbd6370ba, type: 2}
-  - {fileID: 11400000, guid: 654438771412f97428cc78ee313c1f2d, type: 2}
-  - {fileID: 11400000, guid: 7204d8c19cea7df47a62a4841809608d, type: 2}
+  testContainer: {fileID: 11400000, guid: 654438771412f97428cc78ee313c1f2d, type: 2}

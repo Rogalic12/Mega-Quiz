@@ -82,7 +82,7 @@ public class MenuController : MonoBehaviour
             }
 
             YandexGame.savesData.stars -= num;
-            gameManager.openedLevels.Add(new DoubleInt(gameManager.chosenQuizIndex, index));
+            gameManager.OpenedLevels.Add(new DoubleInt(gameManager.chosenQuizIndex, index));
             YandexGame.SaveProgress();
         }
 

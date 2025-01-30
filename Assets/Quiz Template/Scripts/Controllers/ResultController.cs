@@ -10,7 +10,7 @@ public class ResultController : MonoBehaviour
 
     public void Init(int rightAnswers)
     {
-        if (gameManager.language == "ru")
+        if (gameManager.Language == "ru")
         {
             resultText.text = $"Твой результат:\n{rightAnswers}!";
         }

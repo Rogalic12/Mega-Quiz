@@ -24,7 +24,7 @@ public class QuestionController : MonoBehaviour
     // Принимает на вход контейнер с вопросами, на которые потребуется отвечать пользователю и переменную, следует ли рандомизировать порядок вопросов 
     public void Init(CardsContainer container)
     {
-        List<QuestionCard> allPool = new List<QuestionCard>(container.questionCards);
+        List<QuestionCard> allPool = new List<QuestionCard>(container.QuestionCards);
         if (gameManager.shouldShuffle)
         {
             int n = allPool.Count;

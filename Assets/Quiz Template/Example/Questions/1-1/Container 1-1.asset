@@ -14,14 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   shouldCutCardPool: 0
   numberOfQuestions: 0
-  questionCards:
-  - {fileID: 11400000, guid: 55bf51faa376f5c4aac02132696c45be, type: 2}
-  - {fileID: 11400000, guid: 716170c17bcbda14d91ade1bb78979d8, type: 2}
-  - {fileID: 11400000, guid: afac1bb8c4004f948a21accac2b4e64a, type: 2}
-  - {fileID: 11400000, guid: a4d54a85db41aee4683e9b0ab30ba07c, type: 2}
-  - {fileID: 11400000, guid: 68c2356192ab7fd4bb90c0a99f9af380, type: 2}
-  - {fileID: 11400000, guid: 43191e5555b74614da1063d63297f509, type: 2}
-  - {fileID: 11400000, guid: d867d5e07b3ec164a9a3892f24215973, type: 2}
-  - {fileID: 11400000, guid: 6c3cd1e8870ebf24ab8934f494e52d0c, type: 2}
-  - {fileID: 11400000, guid: adbb73ded54a3e747952d906662f50fc, type: 2}
-  - {fileID: 11400000, guid: 64978ad1cfec9bb408d514af970d2526, type: 2}
+  sheetName: "\u041B\u0438\u0441\u04422"
