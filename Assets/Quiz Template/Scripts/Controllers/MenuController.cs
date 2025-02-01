@@ -10,8 +10,7 @@ public class MenuController : MonoBehaviour
 {
     public static GameManager gameManager;
 
-    // Заполнять ручками требуется только переменные ниже
-    public MenuConfig config;
+    public MenuConfig config; // Конфиг нужно назначать из инспектора
 
     [Space]
     public GameObject buyWindow;
@@ -25,7 +24,8 @@ public class MenuController : MonoBehaviour
             throw new NullReferenceException("No menu config!");
         }
 
-        starCounter.text = YandexGame.savesData.stars.ToString();
+        starCounter.GetComponentInChildren<Image>().sprite = config.cashSprite;
+        starCounter.text = YandexGame.savesData.cash.ToString();
 
         if (config.easyButtonImage != null)
         {
@@ -65,7 +65,7 @@ public class MenuController : MonoBehaviour
     {
         MatchCollection matches = Regex.Matches(buyWindow.transform.GetChild(3).GetComponent<TextMeshProUGUI>().text, @"\d+");
         int num = int.Parse(matches[0].Value);
-        if (YandexGame.savesData.stars < num)
+        if (YandexGame.savesData.cash < num)
         {
             DoBuyError("У тебя недостаточно звезд!");
             buyWindow.SetActive(false);
@@ -81,7 +81,7 @@ public class MenuController : MonoBehaviour
                 return;
             }
 
-            YandexGame.savesData.stars -= num;
+            YandexGame.savesData.cash -= num;
             gameManager.OpenedLevels.Add(new DoubleInt(gameManager.chosenQuizIndex, index));
             YandexGame.SaveProgress();
         }

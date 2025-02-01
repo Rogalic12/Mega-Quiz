@@ -1,5 +1,5 @@
 {
-  "idSave": 147,
+  "idSave": 181,
   "isFirstSession": false,
   "language": "ru",
   "promptDone": false,
@@ -11,7 +11,12 @@
     false
   ],
   "passedLevels": 0,
-  "openedLevels": [],
-  "stars": 32,
+  "openedLevels": [
+    {
+      "quiz": 0,
+      "difficult": 1
+    }
+  ],
+  "cash": 3,
   "isMusicPlaying": false
 }

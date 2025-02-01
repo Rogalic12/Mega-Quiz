@@ -3,6 +3,9 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "New Menu Config", menuName = "Quiz Objects/Menu Config", order = 51)]
 public class MenuConfig : ScriptableObject
 {
+    public Sprite cashSprite;
+
+    [Space]
     public Sprite lockImage;
     public Color lockColor = new Color(0f, 0f, 0f, 1f);
 

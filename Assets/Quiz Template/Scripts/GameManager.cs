@@ -8,9 +8,6 @@ using YG;
 // TODO: Метод нажатия на кнопки тестов, запуск меню сложности, запоминание всех выборов
 public class GameManager : MonoBehaviour
 {
-    public Material[] mats;
-
-
     public string Language => YandexGame.lang;
     public HashSet<DoubleInt> OpenedLevels => YandexGame.savesData.openedLevels;
 
@@ -65,19 +62,6 @@ public class GameManager : MonoBehaviour
             musicButton.GetComponent<Image>().sprite = musicSprites[1];
             musicButton.transform.localScale = Vector3.one;
         }
-
-
-
-
-        ExcelReader reader = new("Assets/Quiz Template/Example/Sheets/MegaQuiz.xlsx");
-        List<Dictionary<string, string>> data = reader.ReadSheet("рогалики");
-        for (int i = 0; i < data.Count; i++)
-        {
-            Texture2D texture = new Texture2D(2, 2);
-            texture.filterMode = FilterMode.Point;
-            texture.LoadImage(Convert.FromBase64String(data[i]["Изображение"]));
-            mats[i].mainTexture = texture;
-        }
     }
 
     public GameState GetGameState() { return state; }
@@ -113,7 +97,7 @@ public class GameManager : MonoBehaviour
         }
         else if (currentWindow.TryGetComponent(out QuestionController _))
         {
-            YandexGame.savesData.stars += requiredInt;
+            YandexGame.savesData.cash += requiredInt;
             YandexGame.SaveProgress();
 
             state = GameState.GettingResults;
@@ -135,7 +119,7 @@ public class GameManager : MonoBehaviour
     {
         if (lastWindow.TryGetComponent(out QuestionController controller)) // Досрочный выход из теста
         {
-            YandexGame.savesData.stars += controller.rightAnswers;
+            YandexGame.savesData.cash += controller.rightAnswers;
             YandexGame.SaveProgress();
         }
 

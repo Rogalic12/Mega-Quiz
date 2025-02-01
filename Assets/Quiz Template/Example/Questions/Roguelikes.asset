@@ -9,9 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b25d6b1e707c9fd4a92d80b101e3fadc, type: 3}
-  m_Name: Quiz 1
+  m_Script: {fileID: 11500000, guid: a62cfd1312c517d4f8cb4b7dd80671d1, type: 3}
+  m_Name: Roguelikes
   m_EditorClassIdentifier: 
-  image: {fileID: 1024090739, guid: d63af375d8350db4b92fc969a4b4792e, type: 3}
-  quizName: Quiz 1
-  testContainer: {fileID: 11400000, guid: 000a1f57e42733c4086232c652008230, type: 2}
+  shouldCutCardPool: 0
+  numberOfQuestions: 0
+  sheetName: "\u0440\u043E\u0433\u0430\u043B\u0438\u043A\u0438"
+  filePath: Assets/Quiz Template/Example/Sheets/MegaQuiz.xlsx

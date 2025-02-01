@@ -10,12 +10,8 @@ public class ExcelDataParser
 
         foreach (Dictionary<string, string> row in sheetData)
         {
-            Texture2D texture = new Texture2D(2, 2);
-            Span<byte> bytes = new();
-            if (Convert.TryFromBase64String(row["Изображение"], bytes, out _))
-            {
-                texture.LoadImage(bytes.ToArray());
-            }
+            Texture2D texture = new Texture2D(1, 1);
+            texture.LoadImage(Convert.FromBase64String(row["Изображение"]));
 
             QuestionCard card = new()
             {

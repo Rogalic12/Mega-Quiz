@@ -20,7 +20,7 @@ namespace YG
         // Ваши сохранения
         public int passedLevels = 0;
         public HashSet<DoubleInt> openedLevels = new();
-        public int stars = 0;
+        public int cash = 0;
         public bool isMusicPlaying = true;
 
         // Поля (сохранения) можно удалять и создавать новые. При обновлении игры сохранения ломаться не должны
