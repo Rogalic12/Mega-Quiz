@@ -16,9 +16,10 @@ public class ExcelDataParser
             QuestionCard card = new()
             {
                 question = row["Вопрос"],
+                type = int.Parse(row["Тип вопроса"]),
                 rightAnswer = row["Правильный ответ"],
                 wrongAnswers = new string[3] { row["Неправильный ответ 1"], row["Неправильный ответ 2"], row["Неправильный ответ 3"] },
-                image = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), Vector2.one * 0.5f),         
+                image = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), Vector2.one * 0.5f),
             };
             questions.Add(card);
         }

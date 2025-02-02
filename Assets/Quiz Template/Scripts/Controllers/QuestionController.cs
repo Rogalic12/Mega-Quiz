@@ -18,7 +18,8 @@ public class QuestionController : MonoBehaviour
     public GameObject inMenuWindow;
     public TextMeshProUGUI questionText, counterText;
     public Image image;
-    public GameObject answers, answerButtonPrefab;
+    public RectTransform answersParent;
+    public GameObject answerButtonPrefab;
 
     // Инициализация контроллера. Обязательно вызвать ПЕРЕД началом каждого ответа на вопросы
     // Принимает на вход контейнер с вопросами, на которые потребуется отвечать пользователю и переменную, следует ли рандомизировать порядок вопросов 
@@ -46,22 +47,35 @@ public class QuestionController : MonoBehaviour
     // Функция используется для занесения данных из входной переменной card в интерфейс
     public void NextQuestion(QuestionCard card)
     {
-        for (int i = 0; i < answers.transform.childCount; i++)
-        {
-            Destroy(answers.transform.GetChild(i).gameObject);
-        }
-
         questionText.text = card.question;
         image.sprite = card.image;
         counterText.text = $"{currentQuestion}/{cards.Count}";
 
         List<string> wrongs = new(card.wrongAnswers.OrderBy(_ => Random.value).Take(gameManager.chosenLevelIndex + 1)); // Рандомные неправильные ответы, отрезанные по сложности уровня
         List<string> allAnswers = new(wrongs.Append(card.rightAnswer).OrderBy(_ => Random.value)); // Рандомные варианты ответов
+
         for (int i = 0; i < allAnswers.Count; i++)
         {
-            GameObject button = Instantiate(answerButtonPrefab, answers.transform);
-            int index = i;
-            button.GetComponent<Button>().onClick.AddListener(() => AnswerButtonPressed(index));
+            if (answersParent.childCount > gameManager.chosenLevelIndex + 1)
+            {
+                while (answersParent.childCount == gameManager.chosenLevelIndex + 1)
+                {
+                    print("Уничтожен");
+                    Destroy(answersParent.GetChild(0).gameObject);
+                }
+            }
+
+            GameObject button;
+            try
+            {
+                button = answersParent.GetChild(i).gameObject;
+            }
+            catch
+            {
+                button = Instantiate(answerButtonPrefab, answersParent);
+                int index = i;
+                button.GetComponent<Button>().onClick.AddListener(() => AnswerButtonPressed(index));
+            }
             button.GetComponentInChildren<TextMeshProUGUI>().text = allAnswers[i];
 
             if (allAnswers[i] == card.rightAnswer)
