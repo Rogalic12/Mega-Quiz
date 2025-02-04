@@ -29,6 +29,7 @@ public class GameManager : MonoBehaviour
     [HideInInspector] public int chosenQuizIndex = -1;
 
     [Header("Questions settings")]
+    public QuestionConfig questionConfig;
     public bool shouldShuffle; // —ледует ли рандомизировать пор€док вопросов
     [HideInInspector] public int chosenLevelIndex = -1;
 

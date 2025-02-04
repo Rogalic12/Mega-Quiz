@@ -16,18 +16,21 @@ public class QuestionController : MonoBehaviour
 
     [Space]
     public GameObject inMenuWindow;
+    public GameObject showRightButton, nextButton;
     public TextMeshProUGUI questionText, counterText;
     public Image image;
     public RectTransform answersParent;
     public GameObject answerButtonPrefab;
 
     // Инициализация контроллера. Обязательно вызвать ПЕРЕД началом каждого ответа на вопросы
-    // Принимает на вход контейнер с вопросами, на которые потребуется отвечать пользователю и переменную, следует ли рандомизировать порядок вопросов 
+    // Принимает на вход контейнер с вопросами, на которые потребуется отвечать пользователю
     public void Init(CardsContainer container)
     {
         List<QuestionCard> allPool = new List<QuestionCard>(container.QuestionCards);
         if (gameManager.shouldShuffle)
         {
+            // allPool.OrderBy(_ => Random.value).Reverse(); 
+
             int n = allPool.Count;
             for (int i = n - 1; i > 0; i--)
             {
@@ -41,11 +44,11 @@ public class QuestionController : MonoBehaviour
 
         currentQuestion = 1;
         rightAnswers = 0;
-        NextQuestion(cards[currentQuestion - 1]);
+        LoadNextQuestion(cards[currentQuestion - 1]);
     }
 
     // Функция используется для занесения данных из входной переменной card в интерфейс
-    public void NextQuestion(QuestionCard card)
+    public void LoadNextQuestion(QuestionCard card)
     {
         questionText.text = card.question;
         image.sprite = card.image;
@@ -54,28 +57,16 @@ public class QuestionController : MonoBehaviour
         List<string> wrongs = new(card.wrongAnswers.OrderBy(_ => Random.value).Take(gameManager.chosenLevelIndex + 1)); // Рандомные неправильные ответы, отрезанные по сложности уровня
         List<string> allAnswers = new(wrongs.Append(card.rightAnswer).OrderBy(_ => Random.value)); // Рандомные варианты ответов
 
-        for (int i = 0; i < allAnswers.Count; i++)
+        for (int i = 0; i < answersParent.childCount; i++)
         {
-            if (answersParent.childCount > gameManager.chosenLevelIndex + 1)
-            {
-                while (answersParent.childCount == gameManager.chosenLevelIndex + 1)
-                {
-                    print("Уничтожен");
-                    Destroy(answersParent.GetChild(0).gameObject);
-                }
-            }
+            Destroy(answersParent.GetChild(i).gameObject);
+        }
 
-            GameObject button;
-            try
-            {
-                button = answersParent.GetChild(i).gameObject;
-            }
-            catch
-            {
-                button = Instantiate(answerButtonPrefab, answersParent);
-                int index = i;
-                button.GetComponent<Button>().onClick.AddListener(() => AnswerButtonPressed(index));
-            }
+        for (int i = 0; i < allAnswers.Count; i++)
+        { 
+            GameObject button = Instantiate(answerButtonPrefab, answersParent);
+            int index = i;
+            button.GetComponent<Button>().onClick.AddListener(() => AnswerButtonPressed(index));
             button.GetComponentInChildren<TextMeshProUGUI>().text = allAnswers[i];
 
             if (allAnswers[i] == card.rightAnswer)
@@ -89,25 +80,47 @@ public class QuestionController : MonoBehaviour
     // Нажатие кнопки ответа. На вход подается номер кнопки начиная с 0
     public void AnswerButtonPressed(int buttonIndex)
     {
+        if (nextButton.activeSelf) return;
+
+        nextButton.SetActive(true);
+        Image pressedImage = answersParent.GetChild(buttonIndex).GetComponent<Image>();
         if (buttonIndex == rightIndex)
         {
             rightAnswers++;
+            pressedImage.sprite = gameManager.questionConfig.rightAnswerSprite;
+            pressedImage.color = gameManager.questionConfig.rightButtonColor;
             print("Right!");
         }
         else
         {
+            showRightButton.SetActive(true);
+            pressedImage.sprite = gameManager.questionConfig.wrongAnswerSprite;
+            pressedImage.color = gameManager.questionConfig.wrongButtonColor;
+
             print("Incorrect!");
         }
+    }
 
+    public void NextButtonPressed()
+    {
+        nextButton.SetActive(false);
+        showRightButton.SetActive(false);
         if (currentQuestion != cards.Count) // Если вопрос был не последний
         {
             currentQuestion++;
-            NextQuestion(cards[currentQuestion - 1]);
+            LoadNextQuestion(cards[currentQuestion - 1]);
         }
         else
         {
             gameManager.NextStep(rightAnswers, transform);
         }
+    }
+
+    public void ShowRightAnswer()
+    {
+        Image rightButton = answersParent.GetChild(rightIndex).GetComponent<Image>();
+        rightButton.sprite = gameManager.questionConfig.rightAnswerSprite;
+        rightButton.color = gameManager.questionConfig.rightButtonColor;
     }
 
     public void MenuButtonPressed()
