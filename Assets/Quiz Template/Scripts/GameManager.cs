@@ -67,15 +67,26 @@ public class GameManager : MonoBehaviour
 
     public GameState GetGameState() { return state; }
 
-    private void LoadNewWindow(Transform oldWindow, Transform newWindow)
+    public static bool ChangeCash(int cost)
     {
-        oldWindow.parent.gameObject.SetActive(false);
-        newWindow.parent.gameObject.SetActive(true);
+        if (cost < 0 && YandexGame.savesData.cash < Math.Abs(cost))
+        {
+            return false;
+        }
+        YandexGame.savesData.cash += cost;
+        YandexGame.SaveProgress();
+        return true;
     }
 
     public bool IsLevelWasOpened(int quizIndex, int levelIndex)
     {
         return OpenedLevels.Any(obj => obj.quiz == quizIndex && obj.difficult == levelIndex);
+    }
+
+    private void LoadNewWindow(Transform oldWindow, Transform newWindow)
+    {
+        oldWindow.parent.gameObject.SetActive(false);
+        newWindow.parent.gameObject.SetActive(true);
     }
 
     // Общая функция для основного потока переключения окон
@@ -98,9 +109,6 @@ public class GameManager : MonoBehaviour
         }
         else if (currentWindow.TryGetComponent(out QuestionController _))
         {
-            YandexGame.savesData.cash += requiredInt;
-            YandexGame.SaveProgress();
-
             state = GameState.GettingResults;
             LoadNewWindow(currentWindow, resultController.transform);
             resultController.Init(requiredInt);
@@ -118,12 +126,6 @@ public class GameManager : MonoBehaviour
     // Общая функция для всех кнопок возвращения в меню
     public void BackInMenu(Transform lastWindow)
     {
-        if (lastWindow.TryGetComponent(out QuestionController controller)) // Досрочный выход из теста
-        {
-            YandexGame.savesData.cash += controller.rightAnswers;
-            YandexGame.SaveProgress();
-        }
-
         state = GameState.ChoosingQuiz;
         LoadNewWindow(lastWindow, chooseController.transform);
     }

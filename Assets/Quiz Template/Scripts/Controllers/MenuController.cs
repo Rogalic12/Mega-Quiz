@@ -63,27 +63,26 @@ public class MenuController : MonoBehaviour
 
     public void BuyButtonPressed()
     {
+        // »щет в тексте окна покупки число (означающее собственно стоимость уровн€) и сохран€ет его в num
         MatchCollection matches = Regex.Matches(buyWindow.transform.GetChild(3).GetComponent<TextMeshProUGUI>().text, @"\d+");
         int num = int.Parse(matches[0].Value);
-        if (YandexGame.savesData.cash < num)
+
+        int index = num == config.mediumOpenPrice ? 1 : 2;
+        if (index == 2 && !gameManager.IsLevelWasOpened(gameManager.chosenQuizIndex, 1))
         {
-            DoBuyError("” теб€ недостаточно звезд!");
+            DoBuyError("—начала нужно открыть средний уровень сложности!");
             buyWindow.SetActive(false);
             return;
         }
-        else
-        {
-            int index = num == config.mediumOpenPrice ? 1 : 2;
-            if (index == 2 && !gameManager.IsLevelWasOpened(gameManager.chosenQuizIndex, 1))
-            {
-                DoBuyError("—начала нужно открыть средний уровень сложности!");
-                buyWindow.SetActive(false);
-                return;
-            }
 
-            YandexGame.savesData.cash -= num;
+        if (GameManager.ChangeCash(-num))
+        { 
             gameManager.OpenedLevels.Add(new DoubleInt(gameManager.chosenQuizIndex, index));
             YandexGame.SaveProgress();
+        }
+        else
+        {
+            DoBuyError("” теб€ недостаточно звезд!");
         }
 
         buyWindow.SetActive(false);

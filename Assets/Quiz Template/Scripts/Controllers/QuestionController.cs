@@ -57,11 +57,6 @@ public class QuestionController : MonoBehaviour
         List<string> wrongs = new(card.wrongAnswers.OrderBy(_ => Random.value).Take(gameManager.chosenLevelIndex + 1)); // Рандомные неправильные ответы, отрезанные по сложности уровня
         List<string> allAnswers = new(wrongs.Append(card.rightAnswer).OrderBy(_ => Random.value)); // Рандомные варианты ответов
 
-        for (int i = 0; i < answersParent.childCount; i++)
-        {
-            Destroy(answersParent.GetChild(i).gameObject);
-        }
-
         for (int i = 0; i < allAnswers.Count; i++)
         { 
             GameObject button = Instantiate(answerButtonPrefab, answersParent);
@@ -77,6 +72,16 @@ public class QuestionController : MonoBehaviour
         }
     }
 
+    private void ClearScreen()
+    {
+        nextButton.SetActive(false);
+        showRightButton.SetActive(false);
+        for (int i = 0; i < answersParent.childCount; i++)
+        {
+            Destroy(answersParent.GetChild(i).gameObject);
+        }
+    }
+
     // Нажатие кнопки ответа. На вход подается номер кнопки начиная с 0
     public void AnswerButtonPressed(int buttonIndex)
     {
@@ -87,6 +92,8 @@ public class QuestionController : MonoBehaviour
         if (buttonIndex == rightIndex)
         {
             rightAnswers++;
+            GameManager.ChangeCash(1);
+
             pressedImage.sprite = gameManager.questionConfig.rightAnswerSprite;
             pressedImage.color = gameManager.questionConfig.rightButtonColor;
             print("Right!");
@@ -103,8 +110,7 @@ public class QuestionController : MonoBehaviour
 
     public void NextButtonPressed()
     {
-        nextButton.SetActive(false);
-        showRightButton.SetActive(false);
+        ClearScreen();
         if (currentQuestion != cards.Count) // Если вопрос был не последний
         {
             currentQuestion++;
@@ -118,9 +124,12 @@ public class QuestionController : MonoBehaviour
 
     public void ShowRightAnswer()
     {
-        Image rightButton = answersParent.GetChild(rightIndex).GetComponent<Image>();
-        rightButton.sprite = gameManager.questionConfig.rightAnswerSprite;
-        rightButton.color = gameManager.questionConfig.rightButtonColor;
+        if (GameManager.ChangeCash(-1))
+        {
+            Image rightButton = answersParent.GetChild(rightIndex).GetComponent<Image>();
+            rightButton.sprite = gameManager.questionConfig.rightAnswerSprite;
+            rightButton.color = gameManager.questionConfig.rightButtonColor;
+        }
     }
 
     public void MenuButtonPressed()
@@ -130,6 +139,7 @@ public class QuestionController : MonoBehaviour
 
     public void BackInMenu()
     {
+        ClearScreen();
         inMenuWindow.SetActive(false);
         gameManager.BackInMenu(transform);
     }
